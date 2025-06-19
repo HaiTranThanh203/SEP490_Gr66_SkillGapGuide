@@ -3,10 +3,10 @@ package com.skillgapguide.sgg.Dto;
 import lombok.Data;
 
 @Data
-public class UserDTO {
+public class CreateAdminRequest {
     private String email;
+    private String password;
     private String fullName;
     private String phone;
-    private String avatar;
-    private String role;
+    private Integer roleId;
 }

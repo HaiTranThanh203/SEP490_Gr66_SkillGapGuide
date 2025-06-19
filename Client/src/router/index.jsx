@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import AdminDashboard from "../pages/admin/AdminDashboard";
 import ErrorBoundary from "../components/ErrorBoundary";
 import UserLayout from "../layouts/UserLayout";
 import NotFound from "../pages/NotFound";
@@ -53,7 +54,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorBoundary />,
     children: [
       // Các route con của admin sẽ được định nghĩa ở đây
-      // Ví dụ: { path: "dashboard", element: <AdminDashboard /> },
+      { path: "dashboard", element: <AdminDashboard /> },
       { path: "users", element: <ManagerUser /> },
       { path: "static-content", element: <StaticContentManager /> },
       { path: "about-us", element: <AboutUsManager /> },

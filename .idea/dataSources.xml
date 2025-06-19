@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="skill_gap_guide@localhost" uuid="bad8dfa0-c486-4ba4-9845-047f9cb97189">
+    <data-source source="LOCAL" name="skill_gap_guide@localhost" uuid="e8e33a3f-2e08-4a92-8a9d-4f0df037c7b9">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>

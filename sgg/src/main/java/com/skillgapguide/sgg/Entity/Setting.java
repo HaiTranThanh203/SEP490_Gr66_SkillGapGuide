@@ -12,6 +12,7 @@ public class Setting {
     private Integer setting_id;
     @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "value")
     private String value;
 }
 

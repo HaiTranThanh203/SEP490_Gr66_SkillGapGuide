@@ -3,6 +3,7 @@ package com.skillgapguide.sgg.Controller;
 import com.skillgapguide.sgg.Dto.ChangePasswordRequest;
 import com.skillgapguide.sgg.Dto.ForgotPasswordRequest;
 import com.skillgapguide.sgg.Dto.RegisterRequest;
+import com.skillgapguide.sgg.Dto.UserDTO;
 import com.skillgapguide.sgg.Response.EHttpStatus;
 import com.skillgapguide.sgg.Response.Response;
 import com.skillgapguide.sgg.Service.UserService;

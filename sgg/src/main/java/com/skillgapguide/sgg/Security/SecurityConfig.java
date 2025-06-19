@@ -26,7 +26,12 @@ public class SecurityConfig {
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/api/user/**",
+
+            "/api/feedback/**",
+            "/api/admin/**",
+
             "/api/scrape/**"
+
     };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,6 +42,8 @@ public class SecurityConfig {
                         .requestMatchers(url).permitAll()
                         // Ví dụ phân quyền: Endpoint này chỉ dành cho ADMIN (roleId=2)
                         .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+                        // Ví dụ phân quyền: Endpoint này chỉ dành cho SYSTEMADMIN (roleId=1)
+                        .requestMatchers("/api/systemadmin/**").hasAuthority("ROLE_SYSTEM_ADMIN")
                         // Tất cả các request khác đều cần xác thực
                         .anyRequest().authenticated()
                 )

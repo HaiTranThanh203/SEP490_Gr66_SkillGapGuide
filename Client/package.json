@@ -20,6 +20,7 @@
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.57.0",
     "react-router-dom": "^7.6.1",
+    "recharts": "^2.15.3",
     "sweetalert2": "^11.22.0",
     "sweetalert2-react-content": "^5.1.0"
   },
