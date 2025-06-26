@@ -2,7 +2,8 @@ import { useForm } from "react-hook-form";
 import { useState, memo, useCallback, useEffect } from "react";
 import { authService } from '../services/authService';
 import { useNavigate, Link } from 'react-router-dom';
-
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 export default memo(function RegisterForm() {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -13,7 +14,7 @@ export default memo(function RegisterForm() {
     message: '',
     color: 'bg-gray-200'
   });
-
+const { setUser } = useContext(UserContext);
   const onSubmit = useCallback(async (data) => {
     try {
       setRegisterError('');
@@ -41,12 +42,16 @@ export default memo(function RegisterForm() {
   const handleGoogleLogin = useCallback(async () => {
     try {
       await authService.loginWithGoogle();
+      const userData = await userService.viewProfile();
+     setUser(userData);
+
+    console.log('🔐 User saved:', userData);
       navigate('/'); // or wherever you want to redirect
     } catch (error) {
       console.error("Google login failed:", error);
       // Show error message to user
     }
-  }, [navigate]);
+  }, [navigate,setUser]);
 
   const checkPasswordStrength = (password) => {
     let score = 0;

@@ -1,34 +1,39 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../config/supabase';
+import { userService } from '../services/userService';
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 
-const AuthContext = createContext({});
-
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default function AuthCallbackPage() {
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   useEffect(() => {
-    // Check active sessions
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    const finishOAuthLogin = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
+        if (error || !session?.user) {
+          console.error("OAuth callback session error:", error);
+          return;
+        }
 
-    return () => subscription.unsubscribe();
-  }, []);
+        // Gọi API để lấy thông tin profile từ backend
+        const profile = await userService.viewProfile();
+        console.log('✅ Profile loaded:', profile);
 
-  return (
-    <AuthContext.Provider value={{ user, loading }}>
-      {!loading && children}
-    </AuthContext.Provider>
-  );
+        setUser(profile); // lưu vào context
+        localStorage.setItem('user', JSON.stringify(profile)); // lưu vào localStorage
+
+        navigate('/'); // điều hướng về trang chính
+      } catch (err) {
+        console.error("OAuth login finalization error:", err);
+      }
+    };
+
+    finishOAuthLogin();
+  }, [navigate, setUser]);
+
+  return <div className="p-4 text-center text-lg">🔄 Đang xác thực đăng nhập...</div>;
 }
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-};

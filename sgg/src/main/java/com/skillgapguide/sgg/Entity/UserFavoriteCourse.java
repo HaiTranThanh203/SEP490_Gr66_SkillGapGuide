@@ -9,14 +9,17 @@ import java.sql.Timestamp;
 @jakarta.persistence.Table(name = "user_favorite_course", schema = "skill_gap_guide", catalog = "")
 @Data
 public class UserFavoriteCourse {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "user_id")
     private int userId;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @jakarta.persistence.Column(name = "course_id")
-    private int courseId;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id", referencedColumnName = "course_id")
+    private Course course;
 
     @Basic
     @Column(name = "status")

@@ -2,32 +2,60 @@ import { useForm } from "react-hook-form";
 import { authService } from '../services/authService';
 import { useNavigate, Link } from 'react-router-dom';
 import { useState, memo, useCallback } from "react";
+import { userService } from "../services/userService";
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 
 export default memo(function LoginForm() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState('');
-
+  const { setUser } = useContext(UserContext);
+  
   const onSubmit = useCallback(async (data) => {
     try {
       setLoginError(''); // Clear previous errors
-      const result = await authService.loginWithEmail(data.email, data.password);
+      await authService.loginWithEmail(data.email, data.password);
+      const userData = await userService.viewProfile();
+      
+      if (!userData || !userData.email) {
+        throw new Error("Lỗi tải thông tin người dùng");
+      }
+      
+      // First set in context
+      setUser(userData);
+      // Then explicitly store in localStorage
+      
+      
+      console.log('🔐 User saved:', userData);
       navigate('/');
     } catch (error) {
       console.error("Login failed:", error);
       setLoginError(error.message);
     }
-  }, [navigate]);
+  }, [navigate, setUser]);
 
   const handleGoogleLogin = useCallback(async () => {
     try {
       await authService.loginWithGoogle();
+      const userData = await userService.viewProfile();
+      
+      if (!userData || !userData.email) {
+        throw new Error("Lỗi tải thông tin người dùng");
+      }
+      
+      // First set in context
+      setUser(userData);
+      // Then explicitly store in localStorage
+      localStorage.setItem('user', JSON.stringify(userData));
+      
+      console.log('🔐 User saved:', userData);
       navigate('/'); // or wherever you want to redirect
     } catch (error) {
       console.error("Google login failed:", error);
-      // Show error message to user
+      setLoginError("Đăng nhập thất bại");
     }
-  }, [navigate]);
+  }, [navigate, setUser]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-blue-200 via-blue-300 to-blue-500">

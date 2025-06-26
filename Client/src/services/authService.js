@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase';
+import  {supabase}  from '../config/supabase';
 import axios from 'axios';
 import { ENDPOINTS } from '../constants/apiEndpoints';
 import { apiService } from './api';

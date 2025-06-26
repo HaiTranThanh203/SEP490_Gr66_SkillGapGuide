@@ -12,14 +12,19 @@ export const ENDPOINTS = {
     forgetPassword: '/api/user/forgot-password',
     resetPassword: '/api/user/reset-password',
     // updateProfile: '/api/user/update-profile'   ,
-    changePassword: '/api/user/changePassword'            
-    
+
+    changePassword: '/api/user/changePassword' ,           
+    viewProfile: `/api/profile/viewprofile`,
+    updateProfile: `/api/profile/update`,
+    viewSubscription: `/api/profile/viewscription`,
+
   },
   admin : {
     getAllUsers: '/api/admin/getAllUser',
     getUserByEmail: (email) => `/api/admin/getUserDetail/${email}`,
     enableUser: (email) => `/api/admin/enableAccount/${email}`,
     disableUser: (email) => `/api/admin/disableAccount/${email}`,
+
   pages: {
       // GET endpoints
       getTermsOfService: '/api/admin/pages/getTermsOfService',
@@ -49,5 +54,11 @@ export const ENDPOINTS = {
     // createFeedback: '/api/feedback/createFeedback',
     // updateFeedback: (id) => `/api/feedback/updateFeedback/${id}`,
     // deleteFeedback: (id) => `/api/feedback/deleteFeedback/${id}`
-  }
-};
+
+  },
+  systemAdmin: {
+    createAccount: '/api/systemadmin/create-admin',
+    changeRole:'/api/systemadmin/change-role',
+}};
+
+

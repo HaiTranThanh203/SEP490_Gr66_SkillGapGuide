@@ -12,17 +12,17 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
     private Integer courseId;
-
     @Column(nullable = false)
     private String title;
-
+    private String rating;
+    private String difficulty;
     @Column(nullable = false)
     private String description;
-
     @Column(nullable = false)
     private String provider;
-
-    @Column(nullable = false)
+    private String status;
     private String url;
+    @Column(name = "create_at", nullable = false)
+    private java.sql.Timestamp createdAt;
 }
 

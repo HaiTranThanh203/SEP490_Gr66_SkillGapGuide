@@ -26,7 +26,7 @@ public class SecurityConfig {
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/api/user/**",
-
+            "/api/course/**",
             "/api/feedback/**",
             "/api/admin/**",
             "/api/chat/**",
@@ -45,6 +45,7 @@ public class SecurityConfig {
                         // Ví dụ phân quyền: Endpoint này chỉ dành cho SYSTEMADMIN (roleId=1)
                         .requestMatchers("/api/systemadmin/**").hasAuthority("ROLE_SYSTEM_ADMIN")
                         // Tất cả các request khác đều cần xác thực
+                        .requestMatchers("/api/businessadmin/**").hasAuthority("ROLE_BUSINESS_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Không tạo session

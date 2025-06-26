@@ -41,9 +41,13 @@ CREATE TABLE Skill (
 CREATE TABLE Course (
     course_id INT NOT NULL AUTO_INCREMENT,
     title NVARCHAR(255) NOT NULL,
-    description NVARCHAR(255) NOT NULL,
+    rating double,
+    difficulty NVARCHAR(100),
+    description NVARCHAR(500) NOT NULL,
     provider NVARCHAR(255) NOT NULL,
-    url NVARCHAR(255) NOT NULL,
+    url NVARCHAR(500),
+    status NVARCHAR(50) ,
+    create_at DateTime,
     PRIMARY KEY (course_id)
 );
 
@@ -94,12 +98,14 @@ CREATE TABLE FeedBack (
 
 -- Bảng CV, liên kết đến User
 CREATE TABLE CV (
-    cv_id INT NOT NULL AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    skill NVARCHAR(255) NOT NULL,
-    exp INT NOT NULL,
-    position NVARCHAR(255) NOT NULL,
-    PRIMARY KEY (cv_id),
+    id INT NOT NULL AUTO_INCREMENT,
+    user_id int,
+    file_name varchar(255) NOT NULL,
+    file_path varchar(255) NOT NULL,
+    file_type varchar(255) NOT NULL,
+    upload_date datetime NOT NULL,
+
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES User(user_id)
 );
 
@@ -116,46 +122,53 @@ CREATE TABLE Job (
     FOREIGN KEY (category_id) REFERENCES JobCategory(job_category_id)
 );
 CREATE TABLE User_Favorite_Job (
+	id INT NOT NULL auto_increment,
     user_id INT NOT NULL,
     job_id INT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, job_id),
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES User(user_id),
     FOREIGN KEY (job_id) REFERENCES Job(job_id)
 );
 
 -- Bảng User_Skill (bảng nối), liên kết User và Skill
 CREATE TABLE User_Skill (
+	id INT NOT NULL auto_increment,
     user_id INT NOT NULL,
     skill_id INT NOT NULL,
     level NVARCHAR(255) NOT NULL,
-    PRIMARY KEY (user_id, skill_id),
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES User(user_id),
     FOREIGN KEY (skill_id) REFERENCES Skill(skill_id)
 );
 CREATE TABLE User_Favorite_Missing_Skill (
+	id INT NOT NULL auto_increment,
     user_id INT NOT NULL,
     skill_id INT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, skill_id),
+    status NVARCHAR(50) ,
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES User(user_id),
     FOREIGN KEY (skill_id) REFERENCES Skill(skill_id)
 );
 
 -- Bảng User_Course (bảng nối), liên kết User và Course
 CREATE TABLE User_Course (
+	id INT NOT NULL auto_increment,
     user_id INT NOT NULL,
     course_id INT NOT NULL,
-    PRIMARY KEY (user_id, course_id),
+    status NVARCHAR(50) ,
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES User(user_id),
     FOREIGN KEY (course_id) REFERENCES Course(course_id)
 );
 CREATE TABLE User_Favorite_Course (
+	id INT NOT NULL auto_increment,
     user_id INT NOT NULL,
     course_id INT NOT NULL,
     status NVARCHAR(50) ,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, course_id),
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES User(user_id),
     FOREIGN KEY (course_id) REFERENCES Course(course_id)
 );
@@ -230,6 +243,41 @@ CREATE TABLE user_subscription_history (
     FOREIGN KEY (subscription_id) REFERENCES Subscription(subscription_id)
 );
 
+-- job category
+CREATE TABLE occupation_groups (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    status nvarchar(100)
+);
+
+CREATE TABLE occupation (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    occupation_groups_id INT NOT NULL,
+    status nvarchar(100),
+    FOREIGN KEY (occupation_groups_id) REFERENCES occupation_groups(id)
+);
+
+CREATE TABLE specializations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    occupation_id INT NOT NULL,
+    status nvarchar(100),
+    FOREIGN KEY (occupation_id) REFERENCES occupation(id)
+);
+CREATE TABLE job_specializations (
+    job_id INT NOT NULL,
+    specialization_id INT NOT NULL,
+    PRIMARY KEY (job_id, specialization_id),
+    FOREIGN KEY (job_id) REFERENCES job(job_id),
+    FOREIGN KEY (specialization_id) REFERENCES specializations(id)
+);
+create table user_cv_skills(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    skill nvarchar(100),
+    cv_id int ,
+	FOREIGN KEY (cv_id) REFERENCES CV(id)
+);
 INSERT INTO `skill_gap_guide`.`subscription`(`subscription_id`, `type`, `status`)VALUES    (1,     1,     'active');
 INSERT INTO `skill_gap_guide`.`subscription`(`subscription_id`, `type`, `status`)VALUES    (2,     3,     'active');
 INSERT INTO `skill_gap_guide`.`subscription`(`subscription_id`, `type`, `status`)VALUES    (3,     9,     'active');
@@ -240,10 +288,18 @@ INSERT INTO `skill_gap_guide`.`role`(`role_id`, `name`)VALUES    (3,     'Free U
 INSERT INTO `skill_gap_guide`.`role`(`role_id`, `name`)VALUES		(4,'Premium User');
 INSERT INTO JobCategory (name) VALUES('IT'),('Marketing'),('Finance');
 INSERT INTO Skill (name) VALUES('Python'),('Communication'),('Data Analysis'),('Project Management');
-INSERT INTO Course (title, description, provider, url) VALUES
-('Python for Beginners', 'Khóa học Python cơ bản', 'Coursera', 'https://coursera.org/python'),
-('Digital Marketing', 'Marketing số cho người mới', 'Udemy', 'https://udemy.com/digital-marketing'),
-('Excel Advanced', 'Kỹ năng Excel nâng cao', 'edX', 'https://edx.org/excel');
+INSERT INTO Course (title, rating, difficulty, description, provider, url, status, create_at)
+VALUES
+('Introduction to Python', 4.5, 'Beginner', 'Learn the basics of Python programming.', 'Coursera', 'https://www.coursera.org/python', 'Active', '2025-06-25 10:00:00'),
+('Data Structures and Algorithms', 4.8, 'Intermediate', 'Deep dive into data structures and algorithms.', 'Udemy', 'https://www.udemy.com/dsa', 'Active', '2025-06-20 15:30:00'),
+('Machine Learning Fundamentals', 4.7, 'Advanced', 'Understand the concepts of machine learning.', 'edX', 'https://www.edx.org/ml', 'Active', '2025-06-15 09:00:00'),
+('Web Development Bootcamp', 4.6, 'Beginner', 'Comprehensive guide to web development.', 'Pluralsight', 'https://www.pluralsight.com/webdev', 'Active', '2025-06-10 14:20:00'),
+('Cloud Computing Basics', 4.4, 'Beginner', 'Introduction to cloud computing technologies.', 'AWS', 'https://www.aws.training/cloud', 'Inactive', '2025-06-05 11:10:00'),
+('Deep Learning Specialization', 4.9, 'Advanced', 'Master deep learning with hands-on projects.', 'Coursera', 'https://www.coursera.org/dl', 'Active', '2025-06-01 08:50:00'),
+('Cybersecurity Essentials', 4.3, 'Intermediate', 'Learn the key concepts of cybersecurity.', 'Microsoft', 'https://learn.microsoft.com/cybersecurity', 'Inactive', '2025-05-30 12:00:00'),
+('Digital Marketing 101', 4.2, 'Beginner', 'Basics of digital marketing strategies.', 'LinkedIn Learning', 'https://www.linkedin.com/digitalmarketing', 'Active', '2025-05-25 13:30:00'),
+('Artificial Intelligence Overview', 4.6, 'Intermediate', 'Overview of artificial intelligence concepts.', 'Google', 'https://ai.google/ai-overview', 'Active', '2025-05-20 16:40:00'),
+('Blockchain for Developers', 4.5, 'Advanced', 'Comprehensive guide to blockchain development.', 'IBM', 'https://developer.ibm.com/blockchain', 'Active', '2025-05-15 18:10:00');
 INSERT INTO User (email, password, full_name, role_id, subscription_id, phone, avatar, provider, status_id)
 VALUES
 ('admin@example.com', '$2a$10$ZgjCwtbfKU8YWtJeVjcc8.VVCQIe8XAnCbulK3Su41AFATlQn.cE6', 'Admin User', 1, 2, '0123456789', NULL, 'LOCAL', 2),
@@ -257,10 +313,7 @@ INSERT INTO FeedBack (user_id, content, star, create_at)
 VALUES
 (2, 'Hệ thống rất hữu ích!', 5, '2024-06-11 12:00:00'),
 (3, 'Cần cải thiện giao diện.', 3, '2024-06-12 09:15:00');
-INSERT INTO CV (user_id, skill, exp, position)
-VALUES
-(2, 'Python', 2, 'Junior Developer'),
-(3, 'Marketing', 3, 'Marketing Executive');
+
 INSERT INTO Job (title, description, company, category_id, status, source_url)
 VALUES
 ('Data Analyst', 'Phân tích dữ liệu cho công ty A', 'Company A', 1, 'OPEN', 'https://jobs.com/a'),

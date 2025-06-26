@@ -12,3 +12,10 @@ html {
 body {
   overflow-y: scroll; /* Keep scrolling functionality */
 }
+/* file: custom.css hoặc global.css */
+header,
+.header {
+  background: linear-gradient(to right, #174ea6, #5bb0f7) !important;
+  font-family: inherit !important;
+  z-index: 50;
+}

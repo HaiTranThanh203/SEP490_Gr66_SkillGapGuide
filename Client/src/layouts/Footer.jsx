@@ -1,6 +1,7 @@
 import { memo } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 const Footer = memo(function Footer() {
+  const navigate = useNavigate();
   return (
     <footer className="bg-gray-800 text-white">
       <div className="container mx-auto px-4 py-8">
@@ -17,8 +18,8 @@ const Footer = memo(function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              <li><a href="/about" className="text-gray-300 hover:text-white">About Us</a></li>
-              <li><a href="/courses" className="text-gray-300 hover:text-white">Courses</a></li>
+              <li><a href="/about-us" className="text-gray-300 hover:text-white">About Us</a></li>
+            
               <li><a href="/contact" className="text-gray-300 hover:text-white">Contact</a></li>
             </ul>
           </div>
@@ -27,8 +28,8 @@ const Footer = memo(function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Legal</h4>
             <ul className="space-y-2">
-              <li><a href="/privacy" className="text-gray-300 hover:text-white">Privacy Policy</a></li>
-              <li><a href="/terms" className="text-gray-300 hover:text-white">Terms of Service</a></li>
+              <li><a href="/terms-of-service" className="text-gray-300 hover:text-white">Privacy Policy</a></li>
+              <li><a href="/terms-of-service" className="text-gray-300 hover:text-white">Terms of Service</a></li>
             </ul>
           </div>
 

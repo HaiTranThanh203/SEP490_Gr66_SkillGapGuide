@@ -1,15 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
-import { useState, useEffect, memo, useRef } from "react";
-
+import { useState, useEffect, memo, useRef ,useContext } from "react";
+import { UserContext } from "../context/UserContext";
 const Header = memo(function Header() {
   const [openMenu, setOpenMenu] = useState(null);
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [userAvatar, setUserAvatar] = useState("/default-avatar.png"); // Default avatar
+  const [userAvatar, setUserAvatar] = useState("/default_avatar.png"); // Default avatar
   const profileMenuRef = useRef(null);
-
+const { user } = useContext(UserContext); // <-- Lấy user từ context
+ 
   useEffect(() => {
     const checkLoginStatus = () => {
       setIsLoggedIn(!!localStorage.getItem('token'));
@@ -39,6 +40,13 @@ const Header = memo(function Header() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+  useEffect(() => {
+    if (user && user.avatar) {
+      setUserAvatar(user.avatar);
+    } else {
+      setUserAvatar("/default-avatar.png");
+    }
+  }, [user]);
 
   const handleLogout = async () => {
     try {
