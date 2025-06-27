@@ -3,7 +3,6 @@ import { Save, Eye, Pencil, Trash2, X, Plus, AlertCircle } from "lucide-react";
 import { staticPageService } from "../../services/staticPageService";
 import { showError ,showSuccess} from "../../utils/alert";
 export default function AboutUsManager() {
-
   const [sections, setSections] = useState([]);
   const [editingSection, setEditingSection] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
