@@ -124,7 +124,6 @@ public class CVService {
             userCvSkill.setSkill(skill);
             userCvSkill.setCvId(cvId);
             userCvSkillsRepository.save(userCvSkill);
-            System.out.println("Skill:-----  "+skill);
         }
     }
 }

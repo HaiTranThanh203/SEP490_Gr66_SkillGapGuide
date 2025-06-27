@@ -16,6 +16,7 @@ class CorsConfig {
         
         // Allow frontend URL
         config.addAllowedOrigin("http://localhost:5173");
+        //LM Studio
         config.addAllowedOrigin("http://26.20.213.66:1234");
 
         // Allow common HTTP methods
