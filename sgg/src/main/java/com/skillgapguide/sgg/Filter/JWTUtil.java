@@ -44,4 +44,15 @@ public class JWTUtil {
                 .getExpiration();
         return expiration.before(new Date());
     }
+    public void validateTokenOrThrow(String token) {
+        Date expiration = Jwts.parser()
+                .setSigningKey(secretKey.getBytes())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration();
+        if (expiration.before(new Date())) {
+            throw new IllegalStateException("Token has expired");
+        }
+    }
 }

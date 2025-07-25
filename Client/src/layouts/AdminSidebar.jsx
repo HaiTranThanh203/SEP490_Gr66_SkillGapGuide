@@ -10,16 +10,8 @@ import {
 } from "lucide-react";
 
 const menu = [
-  { label: "Bảng điều khiển", to: "/admin", icon: <Home size={20} /> },
+  
   { label: "Quản lý người dùng", to: "/admin/users", icon: <Users size={20} /> },
-  { label: "Quản lý thanh toán", to: "/admin/payments", icon: <FileText size={20} /> },
-  { label: "Quản lý nội dung Homepage", to: "/admin/homepage-manage", icon: <Home size={20} /> },
-  { label: "Quản lý nội dung About Us", to: "/admin/about-us", icon: <Info size={20} /> },
-
-  { label: "Quản lý liên kết", to: "/admin/social-link", icon: <Link size={20} /> },
-  { label: "Quản lý phản hồi", to: "/admin/feedback", icon: <MessageSquare size={20} /> },
-  { label: "Quản lý thẻ kỹ năng", to: "/admin/tag-skills", icon: <Tags size={20} /> },
-  { label: "Quản lý nội dung tĩnh", to: "/admin/static-content", icon: <FileText size={20} /> },
 ];
 
 export default function AdminSidebar() {

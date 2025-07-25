@@ -1,12 +1,13 @@
 import axios from 'axios';
+import { showError } from "../utils/alert"; 
 const BASE_URL = import.meta.env.VITE_APP_API_URL || 'http://localhost:8080';
 // 1. api instance - Cấu hình cơ bản axios
 const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-  }
+  timeout: 200000,// 180 giây timeout
+  // headers: {
+  //   'Content-Type': 'application/json',
+  // }
 });
 
 // Request interceptor
@@ -28,31 +29,44 @@ api.interceptors.response.use(
   (response) => response.data,
   (error) => {
     if (error.response) {
-      // Handle different error status codes
-      switch (error.response.status) {
-        case 401:
-          // Handle unauthorized
+      const message = error.response.data?.message || '';
+      if (
+        error.response.status === 401 ||
+        error.response.status === 403
+      ) {
+        // Kiểm tra message backend trả về có thông tin hết hạn JWT không
+        if (
+          message.includes('ExpiredJwtException') ||
+          message.toLowerCase().includes('jwt expired')
+        ) {
           localStorage.removeItem('token');
-          window.location.href = '/login';
-          break;
-        case 403:
-          // Handle forbidden
-         
-          break;
-        case 404:
-          // Handle not found
-          alert('Resource not found. Please check the URL or contact support.');
-          break;
-        default:
-          // Handle other errors
-          alert(`An error occurred: ${error.response.data.message || 'Unknown error'}`);
-          console.error('API Error:', error.response.data);
-          break;
+          showError(
+            "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
+            "Thông báo"
+          );
+          setTimeout(() => {
+            window.location.href = "/login";
+          }, 1500);
+        } else {
+          
+        }
+      } else if (error.response.status === 404) {
+        showError(
+          "Không tìm thấy tài nguyên. Vui lòng kiểm tra lại URL hoặc liên hệ hỗ trợ.",
+          "Lỗi 404"
+        );
+      } else {
+        showError(
+          `Lỗi: ${message || 'Có lỗi xảy ra, vui lòng thử lại.'}`,
+          "Lỗi"
+        );
+        console.error("API Error:", error.response.data);
       }
     }
     return Promise.reject(error);
   }
 );
+
 
 // 2. apiService - Wrapper với xử lý lỗi và interface đơn giản
 export const apiService = {

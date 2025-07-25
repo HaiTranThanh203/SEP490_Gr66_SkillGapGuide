@@ -20,4 +20,8 @@ public class JobCvSkillScore {
         this.cvSkill = cvSkill;
         this.score = score;
     }
+
+    public JobCvSkillScore() {
+
+    }
 }

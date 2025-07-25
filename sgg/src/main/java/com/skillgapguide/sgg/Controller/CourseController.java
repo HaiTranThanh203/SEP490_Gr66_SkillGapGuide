@@ -1,6 +1,7 @@
 package com.skillgapguide.sgg.Controller;
 
 import com.skillgapguide.sgg.Dto.CourseDTO;
+import com.skillgapguide.sgg.Dto.ScrapeResultDTO;
 import com.skillgapguide.sgg.Entity.Course;
 import com.skillgapguide.sgg.Response.EHttpStatus;
 import com.skillgapguide.sgg.Response.Response;
@@ -8,6 +9,8 @@ import com.skillgapguide.sgg.Service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -77,15 +80,14 @@ public class CourseController {
         return new Response<>(EHttpStatus.OK, "Thay đổi trạng thái khóa học thành công", null);
     }
     @PostMapping("/scrape")
-    public ResponseEntity<String> scrapeCourses(@RequestParam(defaultValue = "1") int numPages,
-                                               @RequestParam(defaultValue = "9") int numItems,
-                                                @RequestParam int cvId) {
-        try{
-        courseService.scrapeAndSaveCoursesByCvId(numPages, numItems, cvId);
-            return ResponseEntity.ok("Đã cào và lưu thành công course");
+    public Response<?> scrapeCourses(@RequestParam(defaultValue = "1") int numPages,
+                                     @RequestParam(defaultValue = "9") int numItems,
+                                     @RequestParam int cvId) {
+        try {
+            ScrapeResultDTO result = courseService.scrapeAndSaveCoursesByCvId(numPages, numItems, cvId);
+            return new Response<>(EHttpStatus.OK, "Đã cào và lưu thành công course", result);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Lỗi xảy ra khi cào dữ liệu: " + e.getMessage());
+            return new Response<>(EHttpStatus.BAD_REQUEST, "Lỗi xảy ra khi cào dữ liệu: " + e.getMessage(), null);
         }
-
     }
 }

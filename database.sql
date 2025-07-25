@@ -22,14 +22,6 @@ CREATE TABLE Subscription (
                               status NVARCHAR(255) NOT NULL,
                               PRIMARY KEY (subscription_id)
 );
-
--- Bảng lưu các kỹ năng chung
-CREATE TABLE Skill (
-                       skill_id INT NOT NULL AUTO_INCREMENT,
-                       name NVARCHAR(255) NOT NULL,
-                       PRIMARY KEY (skill_id)
-);
-
 -- Bảng lưu các khóa học
 CREATE TABLE Course (
                         course_id INT NOT NULL AUTO_INCREMENT,
@@ -109,7 +101,7 @@ CREATE TABLE Job (
                      description NVARCHAR(7000) NOT NULL,
                      company NVARCHAR(255) NOT NULL,
                      status NVARCHAR(255) NOT NULL,
-                     source_url nvarchar(512) NOT NULL,
+                     source_url nvarchar(512) NULL,
                      PRIMARY KEY (job_id),
                      FOREIGN KEY (cv_id) REFERENCES CV(id)
 );
@@ -132,30 +124,8 @@ CREATE TABLE job_des_file (
                               upload_date datetime NOT NULL,
                               PRIMARY KEY (id),
                               FOREIGN KEY (user_id) REFERENCES User(user_id),
-                              FOREIGN KEY (job_id) REFERENCES job(job_id)
+                              FOREIGN KEY (job_id) REFERENCES job(job_id) on delete cascade
 );
-
--- Bảng User_Skill (bảng nối), liên kết User và Skill
-CREATE TABLE User_Skill (
-                            id INT NOT NULL auto_increment,
-                            user_id INT NOT NULL,
-                            skill_id INT NOT NULL,
-                            level NVARCHAR(255) NOT NULL,
-                            PRIMARY KEY (id),
-                            FOREIGN KEY (user_id) REFERENCES User(user_id),
-                            FOREIGN KEY (skill_id) REFERENCES Skill(skill_id)
-);
-CREATE TABLE User_Favorite_Missing_Skill (
-                                             id INT NOT NULL auto_increment,
-                                             user_id INT NOT NULL,
-                                             skill_id INT NOT NULL,
-                                             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                                             status NVARCHAR(50) ,
-                                             PRIMARY KEY (id),
-                                             FOREIGN KEY (user_id) REFERENCES User(user_id),
-                                             FOREIGN KEY (skill_id) REFERENCES Skill(skill_id)
-);
-
 -- Bảng User_Course (bảng nối), liên kết User và Course
 CREATE TABLE User_Course (
                              id INT NOT NULL auto_increment,
@@ -187,29 +157,12 @@ CREATE TABLE StaticPage (
                             update_by int,
                             PRIMARY KEY (id)
 );
-CREATE TABLE SocialLink (
-                            id INT NOT NULL AUTO_INCREMENT,
-                            platform NVARCHAR(255),
-                            url NVARCHAR(255),
-                            icon NVARCHAR(255),
-                            update_at datetime,
-                            update_by int,
-                            PRIMARY KEY (id)
-);
 -- Bảng Cài đặt (Setting)
 CREATE TABLE Setting (
                          setting_id INT NOT NULL AUTO_INCREMENT,
                          name NVARCHAR(255) NOT NULL UNIQUE,
                          value NVARCHAR(255),
                          PRIMARY KEY (setting_id)
-);
-
--- Bảng Thẻ (Tag)
-CREATE TABLE Tag (
-                     tag_id INT NOT NULL AUTO_INCREMENT,
-                     name NVARCHAR(255) NOT NULL,
-                     description NVARCHAR(255) NOT NULL,
-                     PRIMARY KEY (tag_id)
 );
 CREATE TABLE verification_token (
                                     id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -292,7 +245,7 @@ create table job_des_skills(
                                id INT AUTO_INCREMENT PRIMARY KEY,
                                skill nvarchar(100),
                                job_id int ,
-                               FOREIGN KEY (job_id) REFERENCES job(job_id)
+                               FOREIGN KEY (job_id) REFERENCES job(job_id) on delete cascade
 );
 create table job_des_skills_embedding(
                                          id INT AUTO_INCREMENT PRIMARY KEY,
@@ -304,7 +257,7 @@ create table job_cv_skills_score(
                                     job_skill int ,
                                     cv_skill int ,
                                     score double,
-                                    FOREIGN KEY (job_skill) REFERENCES job_des_skills(id),
+                                    FOREIGN KEY (job_skill) REFERENCES job_des_skills(id) on delete cascade,
                                     FOREIGN KEY (cv_skill) REFERENCES user_cv_skills(id)
 );
 INSERT INTO `skill_gap_guide`.`subscription`(`subscription_id`, `type`, `status`)VALUES    (1,     1,     'active');
@@ -315,7 +268,6 @@ INSERT INTO `skill_gap_guide`.`role`(`role_id`, `name`)VALUES    (1,     'System
 INSERT INTO `skill_gap_guide`.`role`(`role_id`, `name`)VALUES    (2,     'Business Admin');
 INSERT INTO `skill_gap_guide`.`role`(`role_id`, `name`)VALUES    (3,     'Free User');
 INSERT INTO `skill_gap_guide`.`role`(`role_id`, `name`)VALUES		(4,'Premium User');
-INSERT INTO Skill (name) VALUES('Python'),('Communication'),('Data Analysis'),('Project Management');
 INSERT INTO Course (title, rating, difficulty, description, provider, url, status, create_at)
 VALUES
     ('Introduction to Python', 4.5, 'Beginner', 'Learn the basics of Python programming.', 'Coursera', 'https://www.coursera.org/python', 'Active', '2025-06-25 10:00:00'),
@@ -350,15 +302,7 @@ INSERT INTO User_Favorite_Job (user_id, job_id, created_at)
 VALUES
     (2, 1, NOW()),
     (3, 2, NOW());
-INSERT INTO User_Skill (user_id, skill_id, level)
-VALUES
-    (2, 1, 'Intermediate'),
-    (2, 2, 'Basic'),
-    (3, 2, 'Advanced');
-INSERT INTO User_Favorite_Missing_Skill (user_id, skill_id, created_at)
-VALUES
-    (2, 3, NOW()),
-    (3, 4, NOW());
+
 INSERT INTO User_Course (user_id, course_id)
 VALUES
     (2, 1),
@@ -371,18 +315,11 @@ INSERT INTO StaticPage (name, title, content, update_at, update_by)
 VALUES
     ('homepage', 'Trang chủ', 'Nội dung trang chủ...', NOW(), 1),
     ('about-us', 'Về chúng tôi', 'Nội dung về chúng tôi...', NOW(), 1);
-INSERT INTO SocialLink (platform, url, icon, update_at, update_by)
-VALUES
-    ('Facebook', 'https://facebook.com/yourpage', 'facebook-icon.png', NOW(), 1),
-    ('LinkedIn', 'https://linkedin.com/company/yourcompany', 'linkedin-icon.png', NOW(), 1);
 INSERT INTO Setting (name, value)
 VALUES
     ('site_name', 'Skill Gap Guide'),
     ('support_email', 'support@skillgap.com');
-INSERT INTO Tag (name, description)
-VALUES
-    ('Remote', 'Công việc từ xa'),
-    ('Full-time', 'Toàn thời gian');
+
 INSERT INTO user_subscription_history (user_id, subscription_id, start_date, end_date, status) VALUES (1, 2, '2024-01-01 00:00:00', '2024-12-31 23:59:59', 'EXPIRED');
 INSERT INTO user_subscription_history (user_id, subscription_id, start_date, end_date, status) VALUES (2, 1, '2024-06-01 00:00:00', '2025-05-31 23:59:59', 'ACTIVE');
 INSERT INTO `skill_gap_guide`.`staticpage`

@@ -28,7 +28,10 @@ public class CVController {
             return new Response<>(EHttpStatus.BAD_REQUEST,"Chỉ chấp nhận file PDF hoặc Word (.docx)");
         }
         return new Response<>(EHttpStatus.OK, cvService.uploadCv(fileName,fileExtension,file));
-
+    }
+    @GetMapping("/getCvSkill")
+    public Response<?> getCvSkill(){
+        return new Response<>(EHttpStatus.OK, cvService.getCvSkill());
     }
 
 }
