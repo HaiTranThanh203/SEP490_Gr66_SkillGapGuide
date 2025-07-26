@@ -6,30 +6,30 @@ export const careerService = {
     return response.result;
   },
 
-//   viewSpecializationEnable: async () => {
-//     const response = await apiService.get(ENDPOINTS.carrer.viewSpecializationEnable);
-//     return response;
-//   },
+  viewSpecializationEnable: async () => {
+    const response = await apiService.get(ENDPOINTS.carrer.viewSpecializationEnable);
+    return response.result;
+  },
 
   viewOccupations: async () => {
     const response = await apiService.get(ENDPOINTS.carrer.viewOccupations);
     return response.result;
   },
 
-//   viewOccupationsEnable: async () => {
-//     const response = await apiService.get(ENDPOINTS.carrer.viewOccupationsEnable);
-//     return response;
-//   },
+  viewOccupationsEnable: async () => {
+    const response = await apiService.get(ENDPOINTS.carrer.viewOccupationsEnable);
+    return response.result;
+  },
 
   viewOccupationGroups: async () => {
     const response = await apiService.get(ENDPOINTS.carrer.viewOccupationGroups);
     return response.result;
   },
 
-//   viewOccupationGroupsEnable: async () => {
-//     const response = await apiService.get(ENDPOINTS.carrer.viewOccupationGroupsEnable);
-//     return response;
-//   },
+  viewOccupationGroupsEnable: async () => {
+    const response = await apiService.get(ENDPOINTS.carrer.viewOccupationGroupsEnable);
+    return response.result;
+  },
 
 //   viewJobCategory: async () => {
 //     const response = await apiService.get(ENDPOINTS.carrer.viewJobCategory);

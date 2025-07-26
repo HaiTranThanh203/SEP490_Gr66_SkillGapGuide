@@ -106,7 +106,7 @@ export default function JobSkillAdmin() {
     try {
       const response = await careerService.addOccupations(data);
       if (response.status === 400) {
-        throw new Error(response?.message || "Đã xảy ra lỗi khi thêm nghề 2.");
+        throw new Error(response?.message || "Đã xảy ra lỗi khi thêm nghề .");
       }
       const { id, name, status, occupationGroup } = response.result;
 

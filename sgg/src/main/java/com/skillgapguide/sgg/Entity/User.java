@@ -59,21 +59,14 @@ public class User implements UserDetails {
     // ------ Spring Security ------
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Chuyển đổi roleId thành quyền của Spring Security
-        // Ví dụ: roleId = 1 là "ROLE_USER", roleId = 2 là "ROLE_ADMIN"
         String role;
-        if (this.roleId == 1) {
-            role = "ROLE_SYSTEM_ADMIN";
-        } else if (this.roleId == 2) {
-            role = "ROLE_BUSINESS_ADMIN";
-        } else if (this.roleId == 3) {
-            role = "ROLE_USER";
-        }
-        else if (this.roleId == 4) {
-            role = "ROLE_PREMIUM_USER";
-        }
-        else {
-            role = "UNKNOWN"; // Mặc định nếu không có role hợp lệ
+        switch (this.roleId) {
+            case 1 -> role = "ROLE_SYSTEM_ADMIN";
+            case 2 -> role = "ROLE_CONTENT_MANAGER";
+            case 3 -> role = "ROLE_FINANCE_ADMIN";
+            case 4 -> role = "ROLE_USER";
+            case 5 -> role = "ROLE_PREMIUM_USER";
+            default -> role = "ROLE_UNKNOWN";
         }
         return List.of(new SimpleGrantedAuthority(role));
     }

@@ -1,10 +1,8 @@
 package com.skillgapguide.sgg.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.canvas.parser.PdfTextExtractor;
-import com.skillgapguide.sgg.Dto.ExtractCvSkillDTO;
 import com.skillgapguide.sgg.Entity.Cv;
 import com.skillgapguide.sgg.Entity.User;
 import com.skillgapguide.sgg.Entity.UserCvSkills;
@@ -23,7 +21,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CVService {
@@ -35,6 +32,8 @@ public class CVService {
     private UserCvSkillsRepository userCvSkillsRepository;
     @Autowired
     private EmbedService embedService;
+    @Autowired
+    private CvSkillService cvSkillService;
     private final String UPLOAD_DIR = "D:/CvData/";
 
     public String uploadCv(String fileName,String fileExtension, MultipartFile file){
@@ -66,14 +65,7 @@ public class CVService {
                 cvRepository.save(cvMetadata);
                 finalCvId = cvMetadata.getId();
             }
-            // Chạy extract skill trong thread riêng
-            new Thread(() -> {
-                try {
-                    extractSkill(path.toAbsolutePath().toString(), finalCvId);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
+            extractSkill(path.toAbsolutePath().toString(), finalCvId);
             return "File CV đã được upload thành công: " + fileName;
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,25 +99,21 @@ public class CVService {
                 "CV:\n" + text ;
 
         LMStudioService service = new LMStudioService(WebClient.builder());
-        service.callLMApi(prompt)
-                .subscribe(content -> {
-                    try {
-                        saveCvSkillsToDb(content, cvId);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-    }
-    public void saveCvSkillsToDb(String aiResponseJson, int cvId) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        ExtractCvSkillDTO response = mapper.readValue(aiResponseJson, ExtractCvSkillDTO.class);
-        List<String> skills = response.getSkills();
-        for (String skill : skills) {
-            UserCvSkills userCvSkill = new UserCvSkills();
-            userCvSkill.setSkill(skill);
-            userCvSkill.setCvId(cvId);
-            userCvSkillsRepository.save(userCvSkill);
-            embedService.getCvSkillEmbedding(skill);
+        String content = service.callLMApi(prompt).block(); // <- CHỜ kết quả trả về
+
+        try {
+            cvSkillService.saveCvSkillsToDb(content, cvId);
+        } catch (Exception e) {
+            System.err.println("Lỗi khi lưu kỹ năng vào DB: " + e.getMessage());
+            e.printStackTrace();
         }
+    }
+    public List<UserCvSkills> getCvSkill(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName(); // lấy từ JWT
+        Integer userId = userRepository.findByEmail(email)
+                .map(User::getUserId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Cv cv = cvRepository.findByUserId(userId);
+        return userCvSkillsRepository.findByCvId(cv.getId());
     }
 }

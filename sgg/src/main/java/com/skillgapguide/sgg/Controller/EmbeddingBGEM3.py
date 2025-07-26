@@ -1,5 +1,5 @@
 from FlagEmbedding import BGEM3FlagModel
-import mysql.connector
+
 import json
 from fastapi import FastAPI
 from pydantic import BaseModel

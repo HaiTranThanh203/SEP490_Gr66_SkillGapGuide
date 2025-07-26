@@ -43,4 +43,18 @@ export const userService = {
       newPassword,
     });
   },
+ getFavoriteMissingSkills: async (userId, pageNo = 1, pageSize = 10) => {
+  return await apiService.get(
+    `${ENDPOINTS.users.getFavoriteMissingSkills.replace("{userId}", userId)}?pageNo=${pageNo}&pageSize=${pageSize}`
+  );
+},
+
+  addFavoriteMissingSkill: async (userId, skillId) => {
+    return await apiService.post(
+      ENDPOINTS.users.addFavoriteMissingSkill.replace("${userId}", userId).replace("${skillId}", skillId)
+    );
+  },
+  getFileHistory: async () => {
+    return await apiService.get(ENDPOINTS.users.fileHistory);
+  },
 };

@@ -32,8 +32,11 @@ public class SecurityConfig {
             "/api/admin/**",
             "/api/chat/**",
             "/api/job/**",
+            "/api/gap/**",
+            "/api/scrape/**",
             "/api/scrape/**",
             "/api/payment/**",
+            "/api/payment/vnpay-return",
 
     };
     @Bean
@@ -50,9 +53,9 @@ public class SecurityConfig {
                         // Ví dụ phân quyền: Endpoint này chỉ dành cho SYSTEMADMIN (roleId=1)
                         .requestMatchers("/api/systemadmin/**").hasAuthority("ROLE_SYSTEM_ADMIN")
                         // Chỉ BUSINESS_ADMIN được phép dùng POST, PUT, DELETE
-                        .requestMatchers(HttpMethod.POST, "/api/businessadmin/**").hasAuthority("ROLE_BUSINESS_ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/businessadmin/**").hasAuthority("ROLE_BUSINESS_ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/businessadmin/**").hasAuthority("ROLE_BUSINESS_ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/businessadmin/**").hasAuthority("ROLE_CONTENT_MANAGER")
+                        .requestMatchers(HttpMethod.PUT, "/api/businessadmin/**").hasAuthority("ROLE_CONTENT_MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/businessadmin/**").hasAuthority("ROLE_CONTENT_MANAGER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Không tạo session

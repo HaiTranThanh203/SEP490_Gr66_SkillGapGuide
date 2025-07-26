@@ -2,12 +2,11 @@ package com.skillgapguide.sgg.Service;
 
 import com.skillgapguide.sgg.Dto.AddSpecializationRequestDTO;
 import com.skillgapguide.sgg.Dto.SpecializationDTO;
-import com.skillgapguide.sgg.Entity.Occupation;
+import com.skillgapguide.sgg.Entity.JobGroup;
 import com.skillgapguide.sgg.Entity.Specialization;
-import com.skillgapguide.sgg.Repository.OccupationRepository;
+import com.skillgapguide.sgg.Repository.JobGroupRepository;
 import com.skillgapguide.sgg.Repository.SpecializationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 public class SpecializationsService {
 
     private final SpecializationRepository specializationRepository;
-    private final OccupationRepository occupationRepository;
+    private final JobGroupRepository occupationRepository;
 
     private SpecializationDTO mapToDTO(Specialization specialization) {
         return new SpecializationDTO(
@@ -57,7 +56,7 @@ public class SpecializationsService {
             throw new IllegalArgumentException("Tên chuyên ngành đã tồn tại");
         }
 
-        Occupation occupation = occupationRepository.findById(dto.getOccupationId())
+        JobGroup occupation = occupationRepository.findById(dto.getOccupationId())
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy ngành nghề với ID: " + dto.getOccupationId()));
 
         Specialization specialization = new Specialization();
@@ -96,7 +95,7 @@ public class SpecializationsService {
             throw new IllegalArgumentException("Tên chuyên ngành đã tồn tại.");
         }
 
-        Occupation occupation = occupationRepository.findById(dto.getOccupationId())
+        JobGroup occupation = occupationRepository.findById(dto.getOccupationId())
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy ngành nghề với ID: " + dto.getOccupationId()));
 
         specialization.setName(dto.getName().trim());

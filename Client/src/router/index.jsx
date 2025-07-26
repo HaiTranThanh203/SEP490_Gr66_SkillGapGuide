@@ -1,44 +1,68 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "../pages/Home";
-import Login from "../pages/Login";
-import AdminDashboard from "../pages/admin/AdminDashboard";
+import { lazy } from "react";
 import ErrorBoundary from "../components/ErrorBoundary";
 import UserLayout from "../layouts/UserLayout";
-import NotFound from "../pages/NotFound";
-import Register from "../pages/Register";
-import UserProfile from "../pages/user/UserProfile";
-import ForgotPassword from "../pages/ForgotPassword";
-import AdminSidebar from "../layouts/AdminSidebar";
-import ManagerUser from "../pages/admin/ManagerUser";
 import AdminLayout from "../layouts/AdminLayout";
-import AboutSection from "../pages/AboutSection";
-import ContactPage from "../pages/ContactPage";
-import CvSkillPage from "../pages/user/CvSkillPage";
-import CVUploadOptions from "../pages/user/CVUploadOptions";
-import AddCVChooseAvailableCareer from "../pages/user/AddCVChooseAvailableCareer";
-import AddCVWriteJobDescription from "../pages/user/AddCVWriteJobDescription";
-import AddCVFromTOPCVLink from "../pages/user/AddCVFromTOPCVLink";
-import AnalysisCVAvailableJob1 from "../pages/user/AnalysisCVAvailableJob1";
-import AnalysisCVAvailableJob2 from "../pages/user/AnalysisCVAvailableJob2";
-import AnalysisCVAvailableJob3 from "../pages/user/AnalysisCVAvailableJob3";
-import AnalysisLinkingJob from "../pages/user/AnalysisLinkingJob";
-import AnalysisJobDescription from "../pages/user/AnalysisJobDescription";
-import FavoriteSkills from "../pages/user/FavoriteSkills";
-import FavoriteCourses from "../pages/user/FavouriteCourses";
-import AddCVWriteJobDescription1 from "../pages/user/AddCVWriteJobDescription1";
-import AuthCallback from "../components/AuthCallback";
-import StaticContentManager from "../pages/admin/StaticContentManager";
-import AboutUsManager from "../pages/admin/AboutUsManager";
-import AdminFeedbackManager from "../pages/admin/AdminFeedbackManager";
-import SocialLinksManager from "../pages/admin/SocialLinksManager";
-import TagSkillManager from "../pages/admin/TagSkillManager";
-import HomePageManager from "../pages/admin/HomePageManager";
-import ResetPassword from "../pages/ResetPassword";
-import ChangePassword from "../pages/ChangePassword";
-import TestAPI from "../pages/admin/TestAPI";
+import AnalyzeUpload from "../pages/user/AnalyzeUpload";
+import AnalyzeLoading from "../pages/user/AnalyzeLoading";
+import AnalyzeResult from "../pages/user/AnalyzeResult";
 
-import TermsEndUserPage from "../pages/TermsEndUserPage";
-import JobTablePage from "../pages/admin/JobTablePage";
+// Import động (React.lazy)
+const Home = lazy(() => import("../pages/Home"));
+const Login = lazy(() => import("../pages/Login"));
+const Register = lazy(() => import("../pages/Register"));
+const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
+const ResetPassword = lazy(() => import("../pages/ResetPassword"));
+const ChangePassword = lazy(() => import("../pages/ChangePassword"));
+const TermsEndUserPage = lazy(() => import("../pages/TermsEndUserPage"));
+const NotFound = lazy(() => import("../pages/NotFound"));
+const AboutSection = lazy(() => import("../pages/AboutSection"));
+const ContactPage = lazy(() => import("../pages/ContactPage"));
+const CvSkillPage = lazy(() => import("../pages/user/CvSkillPage"));
+const UserProfile = lazy(() => import("../pages/user/UserProfile"));
+const ServicePayment = lazy(() => import("../pages/user/ServicePayment"));
+const ServiceRating = lazy(() => import("../pages/user/ServiceRating"));
+const SuggestedCourses = lazy(() => import("../pages/user/SuggestedCourses"));
+const AddCVChooseAvailableCareer = lazy(() =>
+  import("../pages/user/AddCVChooseAvailableCareer")
+);
+const AddCVWriteJobDescription = lazy(() =>
+  import("../pages/user/AddCVWriteJobDescription")
+);
+const AddCVFromTOPCVLink = lazy(() =>
+  import("../pages/user/AddCVFromTOPCVLink")
+);
+const AnalysisLinkingJob = lazy(() =>
+  import("../pages/user/AnalysisLinkingJob")
+);
+const AnalysisJobDescription = lazy(() =>
+  import("../pages/user/AnalysisJobDescription")
+);
+const FavoriteSkills = lazy(() => import("../pages/user/FavoriteSkills"));
+const FavoriteCourses = lazy(() => import("../pages/user/FavouriteCourses"));
+const CourseTracking = lazy(() => import("../pages/user/CourseTracking"));
+const MatchingJobs = lazy(() => import("../pages/user/JobMatches"));
+const MainAnalysisPage = lazy(() => import("../pages/user/MainAnalysisPage"));
+const CVUploadOptions = lazy(() => import("../pages/user/CVUploadOptions"));
+const AuthCallback = lazy(() => import("../components/AuthCallback"));
+
+// Admin
+const AdminDashboard = lazy(() => import("../pages/admin/AdminDashboard"));
+const ManagerUser = lazy(() => import("../pages/admin/ManagerUser"));
+const StaticContentManager = lazy(() =>
+  import("../pages/admin/StaticContentManager")
+);
+const AboutUsManager = lazy(() => import("../pages/admin/AboutUsManager"));
+const AdminFeedbackManager = lazy(() =>
+  import("../pages/admin/AdminFeedbackManager")
+);
+const SocialLinksManager = lazy(() =>
+  import("../pages/admin/SocialLinksManager")
+);
+const TagSkillManager = lazy(() => import("../pages/admin/TagSkillManager"));
+const HomePageManager = lazy(() => import("../pages/admin/HomePageManager"));
+const JobTablePage = lazy(() => import("../pages/admin/JobTablePage"));
+const CourseTable = lazy(() => import("../pages/admin/CourseTable"));
 
 const router = createBrowserRouter([
   {
@@ -51,55 +75,44 @@ const router = createBrowserRouter([
       { path: "register", element: <Register /> },
       { path: "profile", element: <UserProfile /> },
       { path: "forgot-password", element: <ForgotPassword /> },
-      { path: "about-us", element: <AboutSection /> },
-      { path: "contact", element: <ContactPage /> }, // Placeholder for forgot password page
-      {
-        path: "cv-skills",
-        element: <CvSkillPage />,
-      },
-      {path: "cv-upload-options",
-        element: <CVUploadOptions/>
-      },
-      {path: "addCVchooseavailablecareer",
-        element: <AddCVChooseAvailableCareer/>
-      },
-      {path: "addCVwritejobdescription",
-        element: <AddCVWriteJobDescription/>
-      },
-      {path: "addCVfromTOPCVLink",
-        element: <AddCVFromTOPCVLink/>
-      },
-      {path: "analysisCVAvailableJob1",
-        element: <AnalysisCVAvailableJob1/>
-      },
-      {path: "analysisCVAvailableJob2",
-        element: <AnalysisCVAvailableJob2/>
-      },
-      {path: "analysisCVAvailableJob3",
-        element: <AnalysisCVAvailableJob3/>
-      },
-      {path: "analysislinkingjob",
-        element: <AnalysisLinkingJob/>
-      },
-      {path: "analysisjobdescription",
-        element: <AnalysisJobDescription/>
-      },
-      {path: "favouriteskills",
-        element: <FavoriteSkills/>
-      },
-      {path: "favouriteCourses",
-        element: <FavoriteCourses/>
-      },
-      {path: "addcvwritejobdescription1",
-        element: <AddCVWriteJobDescription1/>
-      },
       { path: "reset-password", element: <ResetPassword /> },
-      {path:"change-password",element:<ChangePassword/>},
-
-      //term of service
-      {path:"terms-of-service", element:<TermsEndUserPage/>}, // Placeholder for terms of service page
-
-      {path:"test" , element:<TestAPI/>} // Placeholder for change password page
+      { path: "change-password", element: <ChangePassword /> },
+      { path: "about-us", element: <AboutSection /> },
+      { path: "contact", element: <ContactPage /> },
+      { path: "cv-skills", element: <CvSkillPage /> },
+      { path: "analyze", element: <MainAnalysisPage /> },
+      { path: "cv-upload-options", element: <CVUploadOptions /> },
+      {
+        path: "addCVchooseavailablecareer",
+        element: <AddCVChooseAvailableCareer />,
+      },
+      {
+        path: "addCVwritejobdescription",
+        element: <AddCVWriteJobDescription />,
+      },
+      { path: "addCVfromTOPCVLink", element: <AddCVFromTOPCVLink /> },
+      { path: "matchingjobs", element: <MatchingJobs /> },
+      { path: "servicepayment", element: <ServicePayment /> },
+      { path: "servicerating", element: <ServiceRating /> },
+      { path: "suggestedcourses", element: <SuggestedCourses /> },
+      { path: "analysislinkingjob", element: <AnalysisLinkingJob /> },
+      { path: "analysisjobdescription", element: <AnalysisJobDescription /> },
+      { path: "favouriteskills", element: <FavoriteSkills /> },
+      { path: "favouriteCourses", element: <FavoriteCourses /> },
+      { path: "coursetracking", element: <CourseTracking /> },
+      { path: "terms-of-service", element: <TermsEndUserPage /> },
+      {
+        path: "/analyze/upload",
+        element: <AnalyzeUpload />,
+      },
+      {
+        path: "/analyze/loading",
+        element: <AnalyzeLoading />,
+      },
+      {
+        path: "/analyze/result",
+        element: <AnalyzeResult />,
+      },
     ],
   },
   {
@@ -111,7 +124,6 @@ const router = createBrowserRouter([
     element: <AdminLayout />,
     errorElement: <ErrorBoundary />,
     children: [
-      // Các route con của admin sẽ được định nghĩa ở đây
       { path: "dashboard", element: <AdminDashboard /> },
       { path: "users", element: <ManagerUser /> },
       { path: "static-content", element: <StaticContentManager /> },
@@ -120,10 +132,14 @@ const router = createBrowserRouter([
       { path: "social-link", element: <SocialLinksManager /> },
       { path: "tag-skills", element: <TagSkillManager /> },
       { path: "homepage-manage", element: <HomePageManager /> },
-      {path:"job-manage",element:<JobTablePage/>} // Placeholder for static content manager
+      { path: "course-management", element: <CourseTable /> },
+      { path: "job-management", element: <JobTablePage /> },
     ],
   },
-  { path: "auth/callback", element: <AuthCallback /> }, // Placeholder for auth callback
+  {
+    path: "auth/callback",
+    element: <AuthCallback />,
+  },
 ]);
 
 export default router;

@@ -5,6 +5,7 @@ import com.skillgapguide.sgg.Dto.UserDetailDTO;
 import com.skillgapguide.sgg.Dto.UserListRequest;
 import com.skillgapguide.sgg.Dto.UserListResponse;
 import com.skillgapguide.sgg.Entity.User;
+import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

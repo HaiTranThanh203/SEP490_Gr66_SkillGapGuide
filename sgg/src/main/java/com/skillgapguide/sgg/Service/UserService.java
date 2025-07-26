@@ -247,4 +247,11 @@ public class  UserService {
 
         return "Tạo admin thành công";
     }
+
+    public Integer getUserIdFromContext() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"))
+                .getUserId();
+    }
 }

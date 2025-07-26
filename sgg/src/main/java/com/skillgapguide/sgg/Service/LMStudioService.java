@@ -16,7 +16,7 @@ public class LMStudioService {
 
     public LMStudioService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder
-                .baseUrl("http://26.20.213.66:1234")
+                .baseUrl("http://localhost:1234")
                 .build();
     }
 
@@ -27,7 +27,7 @@ public class LMStudioService {
                         Map.of("role", "user", "content", prompt)
                 ),
                 "temperature", 0.7,
-                "max_tokens", 2048,
+                "max_tokens", 10000,
                 "stream", false
         );
         return webClient.post()

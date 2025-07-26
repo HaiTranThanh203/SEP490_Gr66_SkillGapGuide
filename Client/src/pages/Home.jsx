@@ -5,10 +5,16 @@ import { FiUploadCloud } from "react-icons/fi";
 import { useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import React from "react";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
+import innovation from "../assets/innovation.png";
+import React from "react";
+// Carousel images (có thể thay bằng ảnh thực tế)
+const images = [
+  "/images/slide1.png",
+  "/images/slide2.png",
+  "/images/slide3.png",
+];
+
 const testimonials = [
   {
     img: "https://cdn-icons-png.flaticon.com/512/4140/4140048.png",
@@ -28,35 +34,32 @@ const testimonials = [
 ];
 
 const skillPercent = 94;
-
 const pieData = [
   { name: "Matched", value: skillPercent },
   { name: "Remaining", value: 100 - skillPercent },
 ];
-
 const COLORS = ["#4B8A94", "#e5e5e5"];
 
 const settings = {
   dots: true,
   infinite: true,
   speed: 600,
-  slidesToShow: 2,
+  slidesToShow: 1,
   slidesToScroll: 1,
   arrows: false,
   autoplay: true,
-  responsive: [
-    { breakpoint: 900, settings: { slidesToShow: 1 } }
-  ]
+  centerMode: true,
+  centerPadding: "0px", // căn giữa, không thừa khoảng trắng
+  adaptiveHeight: true,
 };
 
-const Home = () => {
+export default function Home() {
   const [uploading, setUploading] = useState(false);
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-50 via-white to-indigo-50">
-      {/* Hero Section */}
+      {/* HERO SECTION */}
       <section className="relative overflow-hidden py-14 px-4 bg-gradient-to-tr from-indigo-50 via-blue-100 to-indigo-50">
-        {/* Vệt gradient trang trí */}
         <motion.div
           className="absolute -top-16 -left-16 w-80 h-80 bg-gradient-to-br from-indigo-300/40 to-blue-200/10 rounded-full blur-3xl z-0"
           initial={{ opacity: 0, scale: 0.7 }}
@@ -76,38 +79,61 @@ const Home = () => {
             <p className="mt-4 text-gray-700 text-lg font-light">
               Tải lên CV – nhận ngay bản đồ kỹ năng cần thiết, đề xuất định hướng, khóa học phù hợp.
             </p>
-            <motion.button
-              whileHover={{ scale: 1.04, backgroundColor: "#4338CA" }}
-              whileTap={{ scale: 0.97 }}
-              className={`mt-8 inline-flex items-center gap-3 bg-indigo-700 text-white px-7 py-3 rounded-full shadow-lg text-lg font-bold hover:bg-indigo-800 transition-all ${uploading ? "opacity-70 cursor-not-allowed" : ""}`}
-              disabled={uploading}
-              onClick={() => {
-                setUploading(true);
-                setTimeout(() => setUploading(false), 1600); // demo loading
-              }}
-            >
-              <Link to="/cv-upload-options">
-      <button
-        className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-all text-lg font-bold"
-      >
-        <FiUploadCloud className="w-6 h-6" />
-        Tải lên CV & nhận phân tích
-      </button>
-    </Link>
-            </motion.button>
+            <Link to="/analyze">
+              <motion.button
+                whileHover={{ scale: 1.04, backgroundColor: "#4338CA" }}
+                whileTap={{ scale: 0.97 }}
+                className={`mt-8 inline-flex items-center gap-3 bg-indigo-700 text-white px-7 py-3 rounded-full shadow-lg text-lg font-bold hover:bg-indigo-800 transition-all ${uploading ? "opacity-70 cursor-not-allowed" : ""}`}
+                disabled={uploading}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setUploading(true);
+                  setTimeout(() => {
+                    setUploading(false);
+                    window.location.href = "/analyze";
+                  }, 1600); // Demo effect
+                }}
+              >
+                <FiUploadCloud className="w-6 h-6" />
+                Tải lên CV & nhận phân tích
+              </motion.button>
+            </Link>
           </motion.div>
           <motion.img
             initial={{ scale: 0.88, opacity: 0, rotate: 10 }}
             animate={{ scale: 1, opacity: 1, rotate: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            src="https://cdn-icons-png.flaticon.com/512/4139/4139981.png"
+            src={innovation}
             alt="CV upload"
-            className="w-56 mt-10 md:mt-0 drop-shadow-xl"
+            className="w-64 md:w-80 mt-10 md:mt-0 drop-shadow-xl object-contain"
+            style={{ maxHeight: 340 }}
           />
         </div>
       </section>
 
-      {/* Result Steps */}
+      {/* IMAGE CAROUSEL */}
+      <section className="bg-white py-10 px-0 flex justify-center items-center">
+        <div className="w-full max-w-4xl rounded-xl overflow-hidden shadow-lg">
+          <Slider {...settings}>
+            {images.map((img, idx) => (
+              <div key={idx} className="flex justify-center items-center">
+                <img
+                  src={img}
+                  alt={`slide-${idx}`}
+                  className="object-cover w-full h-[320px] md:h-[370px] rounded-xl mx-auto transition-all duration-300"
+                  style={{
+                    objectFit: "cover",
+                    maxHeight: 370,
+                    background: "#e5e5e5"
+                  }}
+                />
+              </div>
+            ))}
+          </Slider>
+        </div>
+      </section>
+
+      {/* Kết quả bạn nhận được */}
       <section className="py-20 bg-white text-center px-4 relative">
         <motion.h3
           initial={{ opacity: 0, y: 40 }}
@@ -268,7 +294,7 @@ const Home = () => {
       </section>
     </div>
   );
-};
+}
 
 // Animated number (count up) for percent
 function CountUp({ end }) {
@@ -288,5 +314,3 @@ function CountUp({ end }) {
   }, [end]);
   return <span>{val}</span>;
 }
-
-export default Home;
